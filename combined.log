@@ -1,0 +1,15 @@
+{"level":"error","message":"EFATAL","timestamp":"2024-08-10T18:05:51.206Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.cluster0.6iiyk.mongodb.net","level":"error","message":"Failed to connect to MongoDB: querySrv ETIMEOUT _mongodb._tcp.cluster0.6iiyk.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.6iiyk.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:293:17)","syscall":"querySrv","timestamp":"2024-08-10T18:05:58.747Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-10T18:08:19.658Z"}
+{"level":"info","message":"User registered: 6617914765","timestamp":"2024-08-10T18:19:39.341Z"}
+{"level":"info","message":"Bot server is shutting down...","timestamp":"2024-08-10T18:29:38.369Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-10T18:34:34.326Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-10T18:47:08.922Z"}
+{"level":"info","message":"User registered: 6617914765","timestamp":"2024-08-10T18:47:42.932Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-10T18:54:36.623Z"}
+{"level":"info","message":"User registered: 6617914765","timestamp":"2024-08-10T18:54:58.822Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-10T18:59:53.843Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-10T19:02:28.704Z"}
+{"level":"info","message":"User registered: 6617914765","timestamp":"2024-08-10T19:03:28.823Z"}
+{"level":"info","message":"Task created: 66b7b98ffeeb5c373dec08c5 for user 6617914765","timestamp":"2024-08-10T19:03:44.534Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-10T19:04:32.119Z"}

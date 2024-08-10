@@ -2,10 +2,9 @@
   "name": "telegram-bot-for-automated-task-management",
   "version": "1.0.0",
   "description": "The bot should allow users to create, update, delete, and list tasks. Additionally, it should send reminders and daily summaries of tasks.",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "start": "node bot.js",
+    "dev": "nodemon api/bot.js"  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/huztfq/Telegram-Bot-for-Automated-Task-Management.git"
@@ -22,6 +21,8 @@
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.2",
     "node-schedule": "^2.1.1",
-    "node-telegram-bot-api": "^0.66.0"
+    "node-telegram-bot-api": "^0.66.0",
+    "nodemon": "^3.1.4",
+    "winston": "^3.14.1"
   }
 }
