@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Task = require('./models/task');
 const fs = require('fs');
 const { logger } = require('./logger'); 
+const cron = require('node-cron');
 
 // Constants
 const token = process.env.TELEGRAM_TOKEN;
@@ -112,6 +113,7 @@ bot.onText(/\/register/, async (msg) => {
             "/create_task <task name> - Create a new task\n" +
             "/list_tasks - List all your tasks\n" +
             "/delete_task <task_id> - Delete a task by ID\n");
+
     } else {
         await bot.sendMessage(chatId, "You are already registered.");
         logger.info(`User already registered attempt: ${chatId}`);
@@ -122,6 +124,7 @@ bot.onText(/\/register/, async (msg) => {
 bot.onText(/\/create_task (.+)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const description = match[1];
+    
 
     if (!registeredUsers.has(chatId)) {
         await bot.sendMessage(chatId, "Please register first using /register.");
@@ -152,6 +155,34 @@ bot.onText(/\/list_tasks/, async (msg) => {
     logger.info(`Tasks listed for user ${chatId}`);
 });
 
+// Update Task
+bot.onText(/\/update_task (\w+) (.+) (\d{4}-\d{2}-\d{2})/, async (msg, match) => {
+    const chatId = msg.chat.id;
+    const taskId = match[1];
+    const newDescription = match[2];
+    const newDueDate = new Date(match[3]);
+
+    const task = await Task.findOneAndUpdate({ _id: taskId, chatId }, { description: newDescription, dueDate: newDueDate }, { new: true });
+    if (task) {
+        await bot.sendMessage(chatId, `Task updated: ${task.description} with new due date: ${task.dueDate.toDateString()}`);
+    } else {
+        await bot.sendMessage(chatId, "Task not found or you do not have permission to update it.");
+    }
+});
+
+// Delete Task
+bot.onText(/\/delete_task (\w+)/, async (msg, match) => {
+    const chatId = msg.chat.id;
+    const taskId = match[1];
+
+    const task = await Task.findOneAndDelete({ _id: taskId, chatId });
+    if (task) {
+        await bot.sendMessage(chatId, "Task deleted successfully.");
+    } else {
+        await bot.sendMessage(chatId, "Task not found or you do not have permission to delete it.");
+    }
+});
+
 // Help Command
 bot.onText(/\/help/, async (msg) => {
     const chatId = msg.chat.id;
@@ -159,8 +190,55 @@ bot.onText(/\/help/, async (msg) => {
         "/register - Register yourself with the bot\n" +
         "/create_task <task name> - Create a new task\n" +
         "/list_tasks - List all your tasks\n" +
-        "/delete_task <task_id> - Delete a task by ID\n");
+        "/delete_task <task_id> - Delete a task by ID\n" +
+        "/update_task <task_id> - Update the task by ID\n");
 });
+
+// Setup for task reminders
+function setupTaskReminders() {
+    // Query all tasks and set up reminders
+    Task.find({}).then(tasks => {
+        tasks.forEach(task => {
+            const now = new Date();
+            const taskDate = new Date(task.dueDate);
+            const reminderTime = new Date(taskDate.getTime() - 3600000); // 1 hour before
+
+            if (reminderTime > now) {
+                cron.schedule(`${reminderTime.getMinutes()} ${reminderTime.getHours()} ${reminderTime.getDate()} ${reminderTime.getMonth() + 1} *`, () => {
+                    bot.sendMessage(task.chatId, `Reminder: Your task "${task.description}" is due in one hour.`);
+                }, {
+                    scheduled: true,
+                    timezone: "Asia/Karachi"
+                });
+            }
+        });
+    });
+}
+
+// Setup for daily summaries sent every day at 8 AM
+function setupDailySummaries() {
+    cron.schedule('0 8 * * *', () => {
+        registeredUsers.forEach(async chatId => {
+            const tasks = await Task.find({ chatId, dueDate: { $gte: new Date() } });
+            if (tasks.length > 0) {
+                let message = "Daily Summary of Tasks:\n";
+                tasks.forEach(task => {
+                    message += `${task._id}: ${task.description} (Due: ${task.dueDate.toDateString()})\n`;
+                });
+                bot.sendMessage(chatId, message);
+            } else {
+                bot.sendMessage(chatId, "No tasks pending for today.");
+            }
+        });
+    }, {
+        scheduled: true,
+        timezone: "Asia/Karachi"
+    });
+}
+
+// Call setup functions after all handlers are defined
+setupTaskReminders();
+setupDailySummaries();
 
 // Notify users of server errors
 async function notifyUsersOfError(message) {

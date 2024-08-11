@@ -13,3 +13,7 @@
 {"level":"info","message":"User registered: 6617914765","timestamp":"2024-08-10T19:03:28.823Z"}
 {"level":"info","message":"Task created: 66b7b98ffeeb5c373dec08c5 for user 6617914765","timestamp":"2024-08-10T19:03:44.534Z"}
 {"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-10T19:04:32.119Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2024-08-11T23:45:09.931Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2024-08-11T23:48:36.576Z"}
+{"level":"info","message":"User registered: 6617914765","timestamp":"2024-08-11T23:48:48.609Z"}
+{"level":"info","message":"Bot server is shutting down...","timestamp":"2024-08-11T23:49:18.310Z"}
