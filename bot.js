@@ -20,7 +20,7 @@ if (!token || !mongoUri) {
 const registeredUsers = new Set();
 
 // Database Connection
-mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUri)
     .then(() => logger.info('Connected to MongoDB successfully.'))
     .catch(err => {
         logger.error('Failed to connect to MongoDB:', err);
@@ -33,9 +33,10 @@ const bot = new TelegramBot(token, { polling: true });
 
 // Error handling for polling issues
 bot.on('polling_error', (error) => {
-    logger.error(error.code, error.message);
+    logger.error(`Polling error (${error.code}): ${error.message}`);
     notifyUsersOfError("Facing technical difficulties, will be back soon.");
 });
+
 
 // Start Command with Options
 bot.onText(/\/start/, async (msg) => {
@@ -251,16 +252,16 @@ async function notifyUsersOfError(message) {
     }
 }
 
-// Global error handlers
+// Extended error details
 process.on('uncaughtException', (err) => {
     logger.error('Uncaught Exception:', err);
-    notifyUsersOfError("Facing technical difficulties, will be back soon.");
+    notifyUsersOfError("Facing critical server error, please check logs.");
     process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
     logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
-    notifyUsersOfError("Facing technical difficulties, will be back soon.");
+    notifyUsersOfError("Critical Promise rejection occurred, please check logs.");
     process.exit(1);
 });
 
