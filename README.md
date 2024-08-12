@@ -16,7 +16,7 @@ This application is a Telegram bot designed to manage tasks. It allows users to 
 First, clone the repository to your local machine using git:
 
 ```bash
-git clone[ <repository-url>](https://github.com/huztfq/Telegram-Bot-for-Automated-Task-Management
+git clone[ https://github.com/huztfq/Telegram-Bot-for-Automated-Task-Management
 cd Telegram-Bot-for-Automated-Task-Management
 ```
 
